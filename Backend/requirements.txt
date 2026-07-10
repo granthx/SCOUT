@@ -1,0 +1,20 @@
+# ─── Core Framework ───────────────────────────────────────────────────────────
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+sse-starlette>=1.8.0
+python-multipart>=0.0.6
+
+# ─── LLM ─────────────────────────────────────────────────────────────────────
+google-genai
+
+# ─── HTTP Client ─────────────────────────────────────────────────────────────
+httpx>=0.26.0
+tenacity>=8.2.0
+
+# ─── Data Validation & Config ────────────────────────────────────────────────
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# ─── Caching (Redis optional; falls back to in-memory) ───────────────────────
+redis>=5.0.0
+cachetools>=5.3.0
