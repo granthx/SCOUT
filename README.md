@@ -11,7 +11,6 @@ SCOUT is an AI-powered shopping assistant that searches Amazon, Flipkart, Blinki
 
 ![Python](https://img.shields.io/badge/Python-100%25-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-async%20%2B%20SSE-009688?logo=fastapi&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-c98a2c)
 ![Status](https://img.shields.io/badge/status-active%20development-e7c98a)
 
 </div>
