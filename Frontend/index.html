@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCOUT — Smart Commerce & Omnichannel Unified Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ────────────────── NAVBAR ────────────────── -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <span class="nav-logo-dot"></span>
+      SCOUT
+    </div>
+    <ul class="nav-links">
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#platforms">Platforms</a></li>
+      <li><a href="#api">API</a></li>
+    </ul>
+    <a href="https://github.com/4-thkind/SCOUT" target="_blank" class="btn btn-primary btn-cap nav-cta">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </nav>
+
+  <!-- ────────────────── HERO ────────────────── -->
+  <section class="hero">
+    <div class="hero-eyebrow">
+      <span class="badge micro-cap">
+        <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="currentColor"/></svg>
+        AI-Powered · India-first · Open Source
+      </span>
+    </div>
+    <h1 class="hero-headline hero-title">
+      One query.<br>
+      <em>Every platform.</em><br>
+      Best pick.
+    </h1>
+    <p class="body-lg hero-sub">
+      SCOUT searches Amazon, Flipkart, Blinkit, Zepto, Instamart, Myntra &amp; Ajio simultaneously — ranks results by a composite scoring engine and streams an AI recommendation in real time.
+    </p>
+    <div class="hero-actions">
+      <a href="#demo" class="btn btn-primary btn-cap">
+        Try the demo
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="https://github.com/4-thkind/SCOUT" target="_blank" class="btn btn-secondary btn-cap">View source</a>
+    </div>
+    <div class="hero-platforms">
+      <span class="chip micro-cap">Amazon</span>
+      <span class="chip micro-cap">Flipkart</span>
+      <span class="chip micro-cap">Blinkit</span>
+      <span class="chip micro-cap">Zepto</span>
+      <span class="chip micro-cap">Instamart</span>
+      <span class="chip micro-cap">Myntra</span>
+      <span class="chip micro-cap">Ajio</span>
+    </div>
+    <div class="scan-bar"></div>
+  </section>
+
+  <!-- ────────────────── DEMO ────────────────── -->
+  <section class="demo" id="demo">
+    <div class="demo-label reveal">
+      <span class="badge micro-cap">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12h8M12 8v8"/></svg>
+        Live interaction
+      </span>
+      <h2 class="display-lg" style="margin-top:16px;">See SCOUT in <em>action</em></h2>
+    </div>
+
+    <div class="chat-window reveal">
+      <div class="chat-header">
+        <div class="chat-dots">
+          <span class="dot-r"></span>
+          <span class="dot-y"></span>
+          <span class="dot-g"></span>
+        </div>
+        <span class="chat-header-title micro-cap">SCOUT · Session #a3f9</span>
+      </div>
+
+      <div class="chat-body">
+        <!-- User message -->
+        <div class="msg-user btn-cap">
+          Sony PS5, a bag of Doritos, and a gaming chair 🎮
+        </div>
+
+        <!-- Thinking badges -->
+        <div class="thinking-row">
+          <div class="thinking-badge micro-cap">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>
+            Parsed intent
+          </div>
+          <div class="thinking-badge micro-cap" style="animation-delay:0.2s;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Searching 6 platforms…
+          </div>
+          <div class="thinking-badge micro-cap" style="animation-delay:0.4s;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M7 12h10M10 18h4"/></svg>
+            Ranking results
+          </div>
+        </div>
+
+        <!-- Product cards -->
+        <div class="products-grid">
+          <a href="https://www.amazon.in/s?k=Sony+PlayStation+5" target="_blank" rel="noopener noreferrer" class="product-card-link">
+            <div class="product-card">
+              <span class="product-platform">Amazon</span>
+              <span class="product-name">Sony PlayStation®5 Console (slim)</span>
+              <span class="product-price">₹44,990</span>
+              <div class="score-bar-wrap">
+                <div class="score-bar"><div class="score-fill" style="width:96%"></div></div>
+                <span class="score-label">96 / 100</span>
+              </div>
+              <div class="product-meta">
+                <span class="product-stars">★★★★★</span> 4.8
+                <span style="margin-left:auto" class="product-delivery">▸ 1 day</span>
+              </div>
+            </div>
+          </a>
+          <a href="https://www.flipkart.com/search?q=Green+Soul+Gaming+Chair" target="_blank" rel="noopener noreferrer" class="product-card-link">
+            <div class="product-card">
+              <span class="product-platform">Flipkart</span>
+              <span class="product-name">Green Soul Monster Ultimate Chair</span>
+              <span class="product-price">₹14,990</span>
+              <div class="score-bar-wrap">
+                <div class="score-bar"><div class="score-fill" style="width:91%"></div></div>
+                <span class="score-label">91 / 100</span>
+              </div>
+              <div class="product-meta">
+                <span class="product-stars">★★★★★</span> 4.5
+                <span style="margin-left:auto" class="product-delivery">▸ 4 days</span>
+              </div>
+            </div>
+          </a>
+          <a href="https://blinkit.com/s/?q=Doritos" target="_blank" rel="noopener noreferrer" class="product-card-link">
+            <div class="product-card">
+              <span class="product-platform">Blinkit</span>
+              <span class="product-name">Doritos Nacho Cheese (130g)</span>
+              <span class="product-price">₹85</span>
+              <div class="score-bar-wrap">
+                <div class="score-bar"><div class="score-fill" style="width:85%"></div></div>
+                <span class="score-label">85 / 100</span>
+              </div>
+              <div class="product-meta">
+                <span class="product-stars">★★★★</span> 4.3
+                <span style="margin-left:auto" class="product-delivery">▸ 12 mins</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- AI narration -->
+        <div class="ai-reply body-md">
+          Here is your ultimate gaming weekend sorted! Grab the <strong>Sony PS5</strong> on Amazon for the best price, and pair it with the <strong>Green Soul Monster</strong> chair from Flipkart for maximum comfort. Your <strong>Doritos</strong> can be delivered in just 12 minutes via Blinkit so you won't go hungry while setting up.<span class="ai-cursor"></span>
+        </div>
+      </div>
+
+      <div class="chat-input-row">
+        <input class="chat-input body-md" type="text" placeholder="Ask about any product…" readonly />
+        <button class="chat-send">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ────────────────── HOW IT WORKS ────────────────── -->
+  <section class="how" id="how">
+    <div class="how-inner">
+      <div class="how-header reveal">
+        <div class="badge micro-cap" style="background:var(--hairline-on-light);color:var(--ink);">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c98a2c" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          Pipeline
+        </div>
+        <h2 class="display-lg" style="margin-top:16px;color:var(--ink);">From query to <em style="color:var(--accent-warn);">ranked answer</em> in seconds</h2>
+        <p class="body-lg" style="color:var(--ink-mute);margin-top:16px;max-width:540px;">
+          Six sequential stages, each powered by a specialized component. No hardcoded logic — the LLM drives routing, extraction, and narration.
+        </p>
+      </div>
+      <div class="how-steps">
+        <div class="step-card reveal">
+          <span class="step-num">01</span>
+          <h3 class="step-title"><em>Intent</em> routing</h3>
+          <p class="step-body">Claude classifies your message into one of six intent types: shopping query, quick commerce, price check, comparison, recommendation, or general. Hindi and Hinglish work natively.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">02</span>
+          <h3 class="step-title">Structured <em>extraction</em></h3>
+          <p class="step-body">Natural language is converted to a typed JSON — budget ceiling, brand preference, feature requirements, pincode — before any platform is touched.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">03</span>
+          <h3 class="step-title"><em>Parallel</em> search</h3>
+          <p class="step-body">All configured platforms are queried concurrently. Results are deduplicated by title fingerprint before scoring, eliminating near-duplicate listings.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">04</span>
+          <h3 class="step-title">6-factor <em>ranking</em></h3>
+          <p class="step-body">Price fit, rating, review count, delivery speed, platform trust, and feature match are each weighted and combined into a 0–100 composite score.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">05</span>
+          <h3 class="step-title"><em>Review</em> summarisation</h3>
+          <p class="step-body">Claude generates concise pros, cons, and a verdict for each top-ranked product — concurrently, so latency stays flat regardless of how many products surface.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">06</span>
+          <h3 class="step-title">SSE <em>streaming</em></h3>
+          <p class="step-body">Events flow to the frontend in real time: thinking badges, intent echo, product cards, then token-by-token AI narration — first token in under a second.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────── PLATFORMS ────────────────── -->
+  <section class="platforms" id="platforms">
+    <div class="reveal">
+      <span class="badge micro-cap">Coverage</span>
+      <h2 class="display-lg" style="margin-top:16px;">Every <em>Indian platform</em> in one query</h2>
+    </div>
+    <div class="platforms-grid reveal">
+      <a href="https://www.amazon.in" target="_blank" class="platform-pill btn-cap" style="text-decoration:none;color:inherit;">
+        <img src="https://www.google.com/s2/favicons?domain=amazon.in&sz=64" alt="Amazon logo" class="platform-icon" style="background:#fff; object-fit: contain; padding: 2px;">
+        Amazon India
+      </a>
+      <a href="https://www.flipkart.com" target="_blank" class="platform-pill btn-cap" style="text-decoration:none;color:inherit;">
+        <img src="https://www.google.com/s2/favicons?domain=flipkart.com&sz=64" alt="Flipkart logo" class="platform-icon" style="background:#fff; object-fit: contain; padding: 2px;">
+        Flipkart
+      </a>
+      <a href="https://www.blinkit.com" target="_blank" class="platform-pill btn-cap" style="text-decoration:none;color:inherit;">
+        <img src="https://www.google.com/s2/favicons?domain=blinkit.com&sz=64" alt="Blinkit logo" class="platform-icon" style="background:#fff; object-fit: contain; padding: 2px;">
+        Blinkit
+      </a>
+      <a href="https://www.zeptonow.com" target="_blank" class="platform-pill btn-cap" style="text-decoration:none;color:inherit;">
+        <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/fb/23/4f/fb234feb-0eba-75f3-c81c-e11225d2f061/Default-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg" alt="Zepto logo" class="platform-icon" style="background:#fff; object-fit: contain; padding: 2px;">
+        Zepto
+      </a>
+      <a href="https://www.swiggy.com/instamart" target="_blank" class="platform-pill btn-cap" style="text-decoration:none;color:inherit;">
+        <img src="https://www.google.com/s2/favicons?domain=swiggy.com&sz=64" alt="Instamart logo" class="platform-icon" style="background:#fff; object-fit: contain; padding: 2px;">
+        Instamart
+      </a>
+      <a href="https://www.myntra.com" target="_blank" class="platform-pill btn-cap" style="text-decoration:none;color:inherit;">
+        <img src="https://www.google.com/s2/favicons?domain=myntra.com&sz=64" alt="Myntra logo" class="platform-icon" style="background:#fff; object-fit: contain; padding: 2px;">
+        Myntra
+      </a>
+      <a href="https://www.ajio.com" target="_blank" class="platform-pill btn-cap" style="text-decoration:none;color:inherit;">
+        <img src="https://www.google.com/s2/favicons?domain=ajio.com&sz=64" alt="Ajio logo" class="platform-icon" style="background:#fff; object-fit: contain; padding: 2px;">
+        Ajio
+      </a>
+      <div class="platform-pill btn-cap" style="border-style:dashed;opacity:0.5;cursor:default;">
+        <span class="platform-icon" style="background:var(--badge-bg);color:var(--ink-mute)">+</span>
+        Extend via plugin
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ────────────────── FEATURES ────────────────── -->
+  <section class="features">
+    <div class="features-header reveal">
+      <span class="badge micro-cap">Architecture</span>
+      <h2 class="display-lg" style="margin-top:16px;">Built to <em>scale</em></h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔀</div>
+        <h3 class="feature-title"><em>LLM</em> intent router</h3>
+        <p class="feature-body">Claude classifies and routes every message. No brittle keyword lists — handles slang, Hinglish, and typos without special casing.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">Async <em>streaming</em></h3>
+        <p class="feature-body">FastAPI + SSE: results stream the moment they're ready. No waiting for the full pipeline to complete before the UI updates.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔒</div>
+        <h3 class="feature-title">Per-session <em>isolation</em></h3>
+        <p class="feature-body">UUID-keyed session objects replace the global shared memory bug. Every user gets an independent conversation context with TTL cache.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🎯</div>
+        <h3 class="feature-title">6-factor <em>scorer</em></h3>
+        <p class="feature-body">Price fit, rating, review volume, delivery speed, platform trust, feature match — weighted into a transparent composite score, not a black box.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">♻️</div>
+        <h3 class="feature-title"><em>Dedup</em> engine</h3>
+        <p class="feature-body">Title fingerprinting removes near-duplicate listings across platforms before they ever reach the ranker or the UI.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔌</div>
+        <h3 class="feature-title">Plugin <em>architecture</em></h3>
+        <p class="feature-body">Add any new platform in four steps: extend BaseIntegration, implement async search(), register it, add env keys. Zero core changes.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ────────────────── API REFERENCE ────────────────── -->
+  <section class="api-ref" id="api">
+    <div class="reveal" style="text-align:center;margin-bottom:var(--sp-xxl);">
+      <span class="badge micro-cap">Developer</span>
+      <h2 class="display-lg" style="margin-top:16px;">Simple <em>API</em></h2>
+    </div>
+
+    <!-- POST /api/chat -->
+    <div class="endpoint-card reveal">
+      <div class="endpoint-header">
+        <span class="method-pill method-post btn-cap">POST</span>
+        <span class="endpoint-path">/api/chat</span>
+        <span class="endpoint-desc micro-cap">SSE streaming</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="body-md" style="color:var(--ink-mute);">Send a natural-language shopping query and receive a stream of typed events.</p>
+        <pre class="code-block">{
+  <span class="key">"message"</span>:    <span class="val">"best wireless headphones under ₹3000"</span>,
+  <span class="key">"session_id"</span>: <span class="val">"abc123"</span>,   <span class="comment">// optional</span>
+  <span class="key">"pincode"</span>:    <span class="val">"110001"</span>    <span class="comment">// optional, for delivery ETAs</span>
+}
+
+<span class="comment">// SSE events emitted:</span>
+event: thinking  → <span class="val">"Searching across platforms…"</span>
+event: intent    → <span class="val">{ query_text, budget_max, … }</span>
+event: products  → <span class="val">{ products: [...], platforms_searched: [...] }</span>
+event: text      → <span class="val">"Best pick is…"</span>  <span class="comment">// token-by-token</span>
+event: done      → <span class="val">{ session_id }</span></pre>
+      </div>
+    </div>
+
+    <!-- GET /api/search -->
+    <div class="endpoint-card reveal">
+      <div class="endpoint-header">
+        <span class="method-pill method-get btn-cap">GET</span>
+        <span class="endpoint-path">/api/search</span>
+        <span class="endpoint-desc micro-cap">Non-streaming</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="body-md" style="color:var(--ink-mute);">Synchronous search for server-to-server use cases.</p>
+        <pre class="code-block">/api/search?<span class="key">q</span>=<span class="val">wireless+headphones</span>&<span class="key">budget</span>=<span class="val">3000</span>&<span class="key">sort</span>=<span class="val">best_value</span></pre>
+      </div>
+    </div>
+
+    <!-- GET /api/health -->
+    <div class="endpoint-card reveal">
+      <div class="endpoint-header">
+        <span class="method-pill method-get btn-cap">GET</span>
+        <span class="endpoint-path">/api/health</span>
+        <span class="endpoint-desc micro-cap">Status check</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="body-md" style="color:var(--ink-mute);">Check which platforms are configured and whether the LLM is connected.</p>
+        <pre class="code-block">{
+  <span class="key">"status"</span>:                <span class="val">"ok"</span>,
+  <span class="key">"llm_connected"</span>:         <span class="val">true</span>,
+  <span class="key">"platforms_configured"</span>:  <span class="val">["serp", "amazon", "flipkart"]</span>,
+  <span class="key">"cache_connected"</span>:       <span class="val">false</span>
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ────────────────── FOOTER CTA ────────────────── -->
+  <section class="footer-cta">
+    <span class="badge micro-cap">Open source</span>
+    <h2 class="hero-headline hero-title" style="margin-top:16px;">
+      Ship it.<br><em>Fork it. Extend it.</em>
+    </h2>
+    <p class="body-lg hero-sub">SCOUT is MIT-licensed and built to be extended. Add a new platform in four steps, swap the LLM, or deploy behind your own API gateway.</p>
+    <div class="footer-actions">
+      <a href="https://github.com/4-thkind/SCOUT" target="_blank" class="btn btn-primary btn-cap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+      <a href="#api" class="btn btn-secondary btn-cap">API docs</a>
+    </div>
+  </section>
+
+  <!-- ────────────────── FOOTER ────────────────── -->
+  <footer>
+    <div class="footer-left">
+      <strong>SCOUT</strong> — Smart Commerce &amp; Omnichannel Unified Tracker<br>
+      <span style="font-size:12px;">Built by 4-thkind & Granthx</span>
+    </div>
+    <div class="footer-right">
+      <a href="https://github.com/4-thkind/SCOUT" target="_blank">GitHub</a>
+      <a href="#api">API</a>
+      <a href="#how">Docs</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
