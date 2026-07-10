@@ -1,110 +1,196 @@
-# SCOUT [Smart Commerce and Omnichannel Unified Tracker]
+<div align="center">
 
-> AI-powered cross-platform shopping assistant for India.  
-> Searches Amazon, Flipkart, Blinkit, Zepto, Instamart, Myntra & Ajio simultaneously,  
-> ranks results by a composite scoring engine, and streams an AI-generated recommendation.
+# 🔍 SCOUT
+### Smart Commerce & Omnichannel Unified Tracker
+
+**One query. Every platform. Best pick.**
+
+SCOUT is an AI-powered shopping assistant that searches Amazon, Flipkart, Blinkit, Zepto, Instamart, Myntra & Ajio simultaneously — ranks every result through a transparent 6-factor scoring engine, and streams a natural-language recommendation back in real time.
+
+[Live Demo](#) · [API Docs](#api-reference) · [Report a Bug](https://github.com/4-thkind/SCOUT/issues)
+
+![Python](https://img.shields.io/badge/Python-100%25-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-async%20%2B%20SSE-009688?logo=fastapi&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-c98a2c)
+![Status](https://img.shields.io/badge/status-active%20development-e7c98a)
+
+</div>
 
 ---
 
-## Architecture Overview
+## Why SCOUT
+
+Shopping across Indian e-commerce means opening seven tabs, comparing prices by hand, and second-guessing which platform actually has the fastest delivery. SCOUT collapses that into a single chat message:
+
+> **"best wireless headphones under ₹3000"**
+
+...and in under a second, it's already searching, ranking, and narrating a verdict — not just a list of links, but an actual recommendation with reasoning.
 
 ```
-User Message (natural language)
+You:   best wireless headphones under ₹3000 🎧
+
+SCOUT: The Sony WH-CH520 is your best pick — 50h battery, USB-C charging,
+       and Sony's DSEE upscaling at ₹2,990 from Flipkart. If budget is
+       tighter, the boAt Rockerz 450 at ₹1,299 punches well above its
+       price with 15h playtime and solid bass.
+
+       ┌─────────────────────────────┬────────┬────────┬──────────┐
+       │ Product                     │ Price  │ Score  │ Delivery │
+       ├─────────────────────────────┼────────┼────────┼──────────┤
+       │ Sony WH-CH520 (Flipkart)    │ ₹2,990 │ 94/100 │ 3 days   │
+       │ boAt Rockerz 450 (Amazon)   │ ₹1,299 │ 88/100 │ 2 days   │
+       │ JBL Tune 520BT (Amazon)     │ ₹2,499 │ 81/100 │ 1 day    │
+       └─────────────────────────────┴────────┴────────┴──────────┘
+```
+
+---
+
+## How It Works
+
+Six sequential stages, each powered by a specialized component — no hardcoded logic, the LLM drives routing, extraction, and narration end to end.
+
+```
+User Message (natural language, Hindi/Hinglish native)
         │
         ▼
-  IntentRouter (Claude)         ← classifies into 6 intent types
+① Intent Router (Claude)        classifies into 6 intent types
         │
-  ┌─────┴──────────────────────────────────────┐
-  │ shopping_query / quick_commerce / price_check│
-  └─────────────────────────────────────────────┘
+② Structured Extraction (Claude) NL → typed JSON: budget, brand, features, pincode
         │
-  IntentExtractor (Claude)      ← NL → structured JSON (budget, brand, features…)
-        │
-  ProductSearchTool             ← parallel fan-out to all platforms
-  ┌─────┼──────────────────────────────────┐
-  │     │     │      │      │      │       │
-Amazon Flipkart Blinkit Zepto Instamart Myntra SerpAPI
-  └─────┴──────────────────────────────────┘
-        │ List[Product] (deduplicated)
-        │
-  ProductRanker                 ← multi-factor scoring (price fit, rating, delivery…)
-        │
-  ReviewSummarizer (Claude)     ← pros/cons/verdict per product (concurrent)
-        │
-  SSE Stream ──────────────────► Frontend
-   ├── THINKING events (loading badges)
-   ├── INTENT event (parsed intent echo)
-   ├── PRODUCTS event (ranked product cards)
-   └── TEXT tokens (streaming AI narration)
+③ Parallel Search                 fans out to every configured platform concurrently
+        │                          Amazon · Flipkart · Blinkit · Zepto · Instamart · Myntra · Ajio
+        │                          → deduplicated by title fingerprint
+        ▼
+④ 6-Factor Ranking                price fit · rating · review volume · delivery speed ·
+        │                          platform trust · feature match → 0–100 composite score
+        ▼
+⑤ Review Summarisation (Claude)   concurrent pros / cons / verdict per top product
+        ▼
+⑥ SSE Streaming                   events flow to the frontend the moment they're ready
+        │                          thinking → intent → products → text (token-by-token) → done
+        ▼
+     Frontend
 ```
 
 ---
 
 ## Key Design Decisions
 
-| Problem in ShoppingGPT | Solution in this model |
-|---|---|
-| Global `ConversationBufferMemory` shared by ALL users | Per-session `Session` objects, UUID-keyed, Redis or local TTL-cache |
-| TF-IDF keyword router — breaks on Hindi/Hinglish | LLM (Claude) intent router — handles any language |
-| Flask sync request/response | FastAPI async + SSE streaming |
-| Hardcoded `E:\chatbot\...` Windows paths | `pydantic-settings` from environment variables |
-| SQLite local product DB | Multi-platform API integrations with caching |
-| No deduplication across platforms | Title-fingerprint deduplication |
-| No product scoring / ranking | 6-factor weighted scoring engine |
-| No review summarisation | Claude-powered per-product pros/cons |
-| Single HTTP response (no streaming) | Server-Sent Events from first token |
+Built as a ground-up rearchitecture of an earlier prototype (ShoppingGPT), fixing the problems that don't show up until real users hit it:
+
+| Problem in the original prototype                     | Solution in SCOUT                                                    |
+| ------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Global shared memory across all users                 | Per-session objects, UUID-keyed, Redis or in-memory TTL cache        |
+| Keyword-based router — breaks on Hindi/Hinglish        | LLM (Claude) intent router — handles slang, Hinglish, typos natively |
+| Synchronous request/response only                     | FastAPI async + Server-Sent Events, streaming from first token       |
+| Hardcoded local paths, no env config                   | `pydantic-settings`, fully environment-driven                        |
+| Single local product database                          | Live multi-platform API integrations with caching                    |
+| No deduplication across platforms                      | Title-fingerprint dedup before results ever reach the ranker         |
+| No product scoring                                     | Transparent 6-factor weighted scoring engine, not a black box        |
+| No review summarisation                                | Claude-generated pros/cons/verdict per product, computed concurrently |
+| No streaming                                            | Full SSE pipeline — badges, intent echo, product cards, live tokens  |
+
+---
+
+## Project Structure
+
+This repo contains both halves of SCOUT:
+
+```
+SCOUT/
+├── Backend/                 FastAPI service — see below
+│   ├── app/
+│   │   ├── main.py             app factory
+│   │   ├── config.py           environment-driven settings
+│   │   ├── agent/               core.py, router.py, prompts.py
+│   │   ├── tools/                intent extraction, search, ranking, review summarisation
+│   │   ├── integrations/         one module per platform (Amazon, Flipkart, Blinkit, Zepto…)
+│   │   ├── models/               Product, SearchIntent, Session, API schemas
+│   │   └── services/             LLM wrapper, cache, per-user session isolation
+│   └── requirements.txt
+│
+├── frontend/                 Landing page + interactive demo (static, no build step)
+│   ├── index.html
+│   ├── styles.css              design tokens lifted straight from DESIGN.md
+│   └── script.js                scroll reveal + demo chat interactivity
+│
+├── DESIGN.md                 Design system: colors, type scale, spacing, component tokens
+└── README.md                 you are here
+```
+
+---
+
+## Tech Stack
+
+| Layer      | Stack |
+|------------|-------|
+| Backend    | Python, FastAPI, async/await, Server-Sent Events |
+| LLM        | Claude — intent routing, structured extraction, review summarisation, narration |
+| Search     | SerpAPI (Google Shopping) day 1 → Amazon PA-API, Flipkart Affiliate API, quick-commerce partnerships |
+| Caching    | Redis with local in-memory fallback |
+| Frontend   | Vanilla HTML / CSS / JS — no framework, no build step, deploys as static files |
+| Design     | Custom token system defined in [`DESIGN.md`](./DESIGN.md) — warm near-black canvas, single amber accent, pill-shaped UI |
 
 ---
 
 ## Quick Start
 
+### Backend
+
 ```bash
-# 1. Clone and install
-git clone <your-repo>
-cd universal-commerce-agent
+cd Backend
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-# 2. Configure API keys
 cp .env.example .env
-# Edit .env — add your GEMINI_API_KEY and SERP_API_KEY at minimum
+# add GEMINI_API_KEY and SERP_API_KEY at minimum
 
-# 3. Run
 python run.py
 # → http://localhost:8000
-# → http://localhost:8000/docs  (interactive API docs)
-# → http://localhost:8000/api/health  (check which platforms are configured)
+# → http://localhost:8000/docs            interactive API docs
+# → http://localhost:8000/api/health      check which platforms are configured
 ```
+
+### Frontend
+
+```bash
+cd frontend
+# no build step — just serve the static files
+python -m http.server 5500
+# → http://localhost:5500
+```
+
+Point the demo chat at your local backend by updating the fetch URL in `script.js` if you're not running both on the same origin.
 
 ---
 
 ## API Reference
 
-### POST /api/chat  (SSE streaming)
+### `POST /api/chat` — SSE streaming
 
-```json
-Request:
+```jsonc
+// Request
 {
   "message": "best wireless headphones under ₹3000",
   "session_id": "abc123",   // optional — server creates one if omitted
-  "pincode": "110001"       // optional — for quick commerce delivery ETAs
+  "pincode": "110001"       // optional — enables delivery ETAs
 }
 
-SSE Events:
-  event: thinking  → { "data": { "message": "Searching across platforms…" } }
-  event: intent    → { "data": { "query_text": "wireless headphones", "budget_max": 3000, … } }
-  event: products  → { "data": { "products": [...ProductCard], "platforms_searched": [...] } }
-  event: text      → { "data": "Best pick is…" }   (token-by-token)
-  event: done      → { "session_id": "abc123" }
+// SSE events
+event: thinking  → { "message": "Searching across platforms…" }
+event: intent    → { "query_text": "...", "budget_max": 3000, ... }
+event: products  → { "products": [...], "platforms_searched": [...] }
+event: text      → "Best pick is…"        // token-by-token
+event: done      → { "session_id": "abc123" }
 ```
 
-### GET /api/search  (non-streaming)
+### `GET /api/search` — non-streaming
 
 ```
 GET /api/search?q=wireless+headphones&budget=3000&pincode=110001&sort=best_value
 ```
 
-### GET /api/health
+### `GET /api/health`
 
 ```json
 {
@@ -115,24 +201,21 @@ GET /api/search?q=wireless+headphones&budget=3000&pincode=110001&sort=best_value
 }
 ```
 
----
+### Frontend integration example (React / Next.js)
 
-## Frontend Integration (Next.js example)
-
-```typescript
-// hooks/useChat.ts
+```ts
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [products, setProducts] = useState<ProductCard[]>([]);
 
   const sendMessage = async (text: string, sessionId?: string) => {
-    const response = await fetch('/api/chat', {
+    const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: text, session_id: sessionId }),
     });
 
-    const reader = response.body!.getReader();
+    const reader = res.body!.getReader();
     const decoder = new TextDecoder();
     let aiText = '';
 
@@ -140,11 +223,9 @@ export function useChat() {
       const { done, value } = await reader.read();
       if (done) break;
 
-      const lines = decoder.decode(value).split('\n');
-      for (const line of lines) {
+      for (const line of decoder.decode(value).split('\n')) {
         if (!line.startsWith('data:')) continue;
         const chunk = JSON.parse(line.slice(5));
-
         if (chunk.type === 'text')     aiText += chunk.data;
         if (chunk.type === 'products') setProducts(chunk.data.products);
         if (chunk.type === 'done')     setMessages(m => [...m, { role: 'assistant', content: aiText }]);
@@ -158,66 +239,52 @@ export function useChat() {
 
 ---
 
-## Adding a New Platform
-
-1. Create `app/integrations/<platform>.py` extending `BaseIntegration`
-2. Implement `async def search(intent, pincode) -> List[Product]`
-3. Add to `_ECOMMERCE_PLATFORMS` or `_QUICK_COMMERCE_PLATFORMS` in `product_search.py`
-4. Add API key fields to `app/config.py` and `.env.example`
-
----
-
 ## Environment Variables
 
-| Variable | Description | Required |
-|---|---|---|
-| `GEMINI_API_KEY` | Claude API key | ✅ Yes |
-| `SERP_API_KEY` | SerpAPI key for Google Shopping | ✅ Day 1 |
-| `AMAZON_ACCESS_KEY` / `SECRET_KEY` / `PARTNER_TAG` | Amazon PA-API 5.0 | ✅ Week 1 |
-| `FLIPKART_AFFILIATE_ID` / `TOKEN` | Flipkart Affiliate API | ✅ Week 1 |
-| `BLINKIT_API_KEY` / `BASE_URL` | Blinkit (via partnership) | 🔜 Future |
-| `ZEPTO_API_KEY` / `BASE_URL` | Zepto (via partnership) | 🔜 Future |
-| `INSTAMART_API_KEY` / `BASE_URL` | Swiggy Instamart | 🔜 Future |
-| `REDIS_URL` | Redis for caching + sessions | Optional |
+| Variable                                             | Description                       | Required  |
+| ------------------------------------------------------ | ------------------------------------ | ----------- |
+| `GEMINI_API_KEY`                                      | Claude API key                    | ✅ Yes    |
+| `SERP_API_KEY`                                        | SerpAPI key for Google Shopping   | ✅ Day 1  |
+| `AMAZON_ACCESS_KEY` / `SECRET_KEY` / `PARTNER_TAG`     | Amazon PA-API 5.0                 | ✅ Week 1 |
+| `FLIPKART_AFFILIATE_ID` / `TOKEN`                      | Flipkart Affiliate API            | ✅ Week 1 |
+| `BLINKIT_API_KEY` / `BASE_URL`                         | Blinkit (via partnership)         | 🔜 Future |
+| `ZEPTO_API_KEY` / `BASE_URL`                           | Zepto (via partnership)           | 🔜 Future |
+| `INSTAMART_API_KEY` / `BASE_URL`                       | Swiggy Instamart                  | 🔜 Future |
+| `REDIS_URL`                                            | Redis for caching + sessions      | Optional  |
 
 ---
 
-## Project Structure
+## Adding a New Platform
 
-```
-app/
-├── main.py                  FastAPI app factory
-├── config.py                All settings from environment
-├── agent/
-│   ├── core.py              CommerceAgent — main orchestrator
-│   ├── router.py            LLM intent classifier
-│   └── prompts.py           All system prompts (single source of truth)
-├── tools/
-│   ├── intent_extractor.py  NL → structured SearchIntent
-│   ├── product_search.py    Parallel multi-platform search
-│   ├── product_ranker.py    6-factor scoring engine
-│   ├── review_summarizer.py Claude-powered pros/cons
-│   └── price_analyzer.py   Cross-platform price comparison
-├── integrations/
-│   ├── base.py              Abstract base + retry logic
-│   ├── serp_api.py          Google Shopping (day 1)
-│   ├── amazon.py            Amazon PA-API 5.0
-│   ├── flipkart.py          Flipkart Affiliate
-│   ├── blinkit.py           ADD API HERE
-│   ├── zepto.py             ADD API HERE
-│   ├── instamart.py         ADD API HERE
-│   └── myntra_ajio.py       Fashion platforms
-├── models/
-│   ├── product.py           Unified Product, ProductCard
-│   ├── intent.py            SearchIntent
-│   ├── session.py           Session, ChatMessage
-│   └── response.py          API request/response shapes
-└── services/
-    ├── llm_service.py       Anthropic Claude wrapper (stream + JSON)
-    ├── cache_service.py     Redis + in-memory fallback
-    └── session_service.py   Per-user isolated sessions
-```
+SCOUT's integration layer is a plugin architecture — new platforms don't touch core logic:
+
+1. Create `Backend/app/integrations/<platform>.py` extending `BaseIntegration`
+2. Implement `async def search(intent, pincode) -> List[Product]`
+3. Register it in `_ECOMMERCE_PLATFORMS` or `_QUICK_COMMERCE_PLATFORMS` in `product_search.py`
+4. Add its API keys to `app/config.py` and `.env.example`
 
 ---
 
-*Built for the Universal Commerce Agent project. See `universal_commerce_agent_roadmap.md` for full project context.*
+## Design System
+
+The frontend's visual language — warm near-black canvas, a single disciplined amber accent, pill-shaped buttons/badges, bold display type with italic emphasis — is fully specified as a reusable token system in [`DESIGN.md`](./DESIGN.md). Hand that file to any design tool or AI agent to extend the UI consistently.
+
+---
+
+## Roadmap
+
+- [ ] Live Amazon PA-API + Flipkart Affiliate integration (currently SerpAPI-backed)
+- [ ] Blinkit / Zepto / Instamart quick-commerce partnerships
+- [ ] Redis-backed session store for production deployments
+- [ ] Price-drop tracking and alerts
+- [ ] Public hosted demo
+
+---
+
+
+
+<div align="center">
+
+Built by [Utkarsh Singh](https://github.com/4-thkind) and [Granth Chabbra](https://github.com/granthx)
+
+</div>
