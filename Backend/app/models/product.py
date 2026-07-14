@@ -21,6 +21,10 @@ class Platform(str, Enum):
     ZEPTO = "zepto"
     INSTAMART = "instamart"
     ZOMATO = "zomato"
+    CHROMA = "chroma"
+    CROMA = "croma"
+    VIJAY_SALES = "vijay sales"
+    RELIANCE = "reliance"
     SERP = "serp"              # fallback when source is Google Shopping
 
 

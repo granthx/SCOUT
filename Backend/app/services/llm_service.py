@@ -35,16 +35,27 @@ class LLMService:
         max_tokens: int = 1024,
         temperature: float = 0.2,
     ) -> AsyncIterator[str]:
-        """Yield text tokens as they arrive from Claude."""
-        async with self._client.messages.stream(
+        """Yield text tokens as they arrive from Gemini."""
+        gemini_messages = [
+            {
+                "role": "user" if m["role"] == "user" else "model",
+                "parts": [{"text": m["content"]}]
+            }
+            for m in messages
+        ]
+        
+        response = await self._client.aio.models.generate_content_stream(
             model=settings.llm_model,
-            max_tokens=max_tokens,
-            system=system,
-            messages=messages,
-            temperature=temperature,
-        ) as stream:
-            async for text in stream.text_stream:
-                yield text
+            contents=gemini_messages,
+            config={
+                "system_instruction": system,
+                "temperature": temperature,
+                "max_output_tokens": max_tokens
+            }
+        )
+        async for chunk in response:
+            if chunk.text:
+                yield chunk.text
 
     # ── Core: full completion ────────────────────────────────────────────────
 
@@ -56,14 +67,24 @@ class LLMService:
         temperature: float = 0.2,
     ) -> str:
         """Return the full text of a single completion."""
-        response = await self._client.messages.create(
+        gemini_messages = [
+            {
+                "role": "user" if m["role"] == "user" else "model",
+                "parts": [{"text": m["content"]}]
+            }
+            for m in messages
+        ]
+
+        response = await self._client.aio.models.generate_content(
             model=settings.llm_model,
-            max_tokens=max_tokens,
-            system=system,
-            messages=messages,
-            temperature=temperature,
+            contents=gemini_messages,
+            config={
+                "system_instruction": system,
+                "temperature": temperature,
+                "max_output_tokens": max_tokens
+            }
         )
-        return response.content[0].text
+        return response.text
 
     # ── Structured JSON output ────────────────────────────────────────────────
 

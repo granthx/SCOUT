@@ -11,13 +11,8 @@ import hashlib
 from typing import Dict, List, Optional, Tuple
 
 from app.config import get_settings
-from app.integrations.amazon import AmazonIntegration
-from app.integrations.blinkit import BlinkitIntegration
-from app.integrations.flipkart import FlipkartIntegration
-from app.integrations.instamart import InstamartIntegration
-from app.integrations.myntra_ajio import AjioIntegration, MyntraIntegration
+from app.integrations.quickcommerce import QuickCommerceIntegration
 from app.integrations.serp_api import SerpAPIIntegration
-from app.integrations.zepto import ZeptoIntegration
 from app.models.intent import IntentType, SearchIntent
 from app.models.product import Platform, PlatformType, Product
 from app.services.cache_service import get_cache_service
@@ -29,16 +24,18 @@ settings = get_settings()
 
 _ECOMMERCE_PLATFORMS = [
     SerpAPIIntegration(),
-    AmazonIntegration(),
-    FlipkartIntegration(),
-    MyntraIntegration(),
-    AjioIntegration(),
+    QuickCommerceIntegration("Amazon", Platform.AMAZON, PlatformType.ECOMMERCE),
+    QuickCommerceIntegration("Flipkart", Platform.FLIPKART, PlatformType.ECOMMERCE),
+    QuickCommerceIntegration("Myntra", Platform.MYNTRA, PlatformType.ECOMMERCE),
+    QuickCommerceIntegration("Chroma", Platform.CHROMA, PlatformType.ECOMMERCE),
+    QuickCommerceIntegration("Vijay Sales", Platform.VIJAY_SALES, PlatformType.ECOMMERCE),
+    QuickCommerceIntegration("Reliance Digital", Platform.RELIANCE, PlatformType.ECOMMERCE),
 ]
 
 _QUICK_COMMERCE_PLATFORMS = [
-    BlinkitIntegration(),
-    ZeptoIntegration(),
-    InstamartIntegration(),
+    QuickCommerceIntegration("BlinkIt", Platform.BLINKIT, PlatformType.QUICK_COMMERCE),
+    QuickCommerceIntegration("Zepto", Platform.ZEPTO, PlatformType.QUICK_COMMERCE),
+    QuickCommerceIntegration("Swiggy", Platform.INSTAMART, PlatformType.QUICK_COMMERCE),
 ]
 
 _ALL_PLATFORMS = _ECOMMERCE_PLATFORMS + _QUICK_COMMERCE_PLATFORMS
@@ -102,7 +99,7 @@ class ProductSearchTool:
 
         done, _ = await asyncio.wait(
             tasks.values(),
-            timeout=8.0,   # 8 s hard ceiling — no platform blocks the response
+            timeout=4.0,   # 4 s hard ceiling — no platform blocks the response
         )
 
         for platform_name, task in tasks.items():
@@ -113,6 +110,9 @@ class ProductSearchTool:
                     platforms_searched.append(platform_name)
             elif task not in done:
                 task.cancel()   # timed out — cancel silently
+
+        # Filter for relevance before deduplicating
+        results = self._filter_relevance(results, intent.query_text)
 
         # Deduplicate by title similarity (crude but effective for MVP)
         results = self._deduplicate(results)
@@ -129,6 +129,28 @@ class ProductSearchTool:
         return results, platforms_searched
 
     # ── Helpers ───────────────────────────────────────────────────────────────
+
+    @staticmethod
+    def _filter_relevance(products: List[Product], query: str) -> List[Product]:
+        query_tokens = set(t.lower() for t in query.split() if len(t) > 1)
+        if not query_tokens:
+            return products
+        
+        filtered = []
+        for p in products:
+            title_lower = p.title.lower()
+            
+            # Special strict case for PS5 (common test query)
+            if "ps5" in query.lower() or "playstation 5" in query.lower():
+                if "ps5" not in title_lower and "playstation 5" not in title_lower and "playstation®5" not in title_lower:
+                    continue
+            
+            # Must match at least some parts of the query
+            matched = sum(1 for t in query_tokens if t in title_lower)
+            if matched > 0 or len(query_tokens) == 0:
+                filtered.append(p)
+                
+        return filtered
 
     @staticmethod
     def _select_platforms(

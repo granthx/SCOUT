@@ -22,30 +22,31 @@ import math
 from typing import List
 
 from app.models.intent import SearchIntent, SortPriority
-from app.models.product import Product
+from app.models.product import Product, Platform
 
 
 _BASE_WEIGHTS = {
-    "price_fit": 0.30,
-    "rating": 0.25,
-    "delivery_speed": 0.20,
+    "price_fit": 0.25,
+    "rating": 0.20,
+    "delivery_speed": 0.15,
     "review_count": 0.10,
     "discount": 0.10,
     "stock": 0.05,
+    "platform_priority": 0.15,
 }
 
 _PRIORITY_OVERRIDES: dict[SortPriority, dict] = {
     SortPriority.LOWEST_PRICE: {
-        "price_fit": 0.60, "rating": 0.13, "delivery_speed": 0.10,
-        "review_count": 0.07, "discount": 0.07, "stock": 0.03,
+        "price_fit": 0.50, "rating": 0.13, "delivery_speed": 0.10,
+        "review_count": 0.07, "discount": 0.07, "stock": 0.03, "platform_priority": 0.10,
     },
     SortPriority.BEST_RATING: {
-        "price_fit": 0.15, "rating": 0.60, "delivery_speed": 0.10,
-        "review_count": 0.07, "discount": 0.05, "stock": 0.03,
+        "price_fit": 0.15, "rating": 0.50, "delivery_speed": 0.10,
+        "review_count": 0.07, "discount": 0.05, "stock": 0.03, "platform_priority": 0.10,
     },
     SortPriority.FASTEST_DELIVERY: {
-        "price_fit": 0.15, "rating": 0.10, "delivery_speed": 0.60,
-        "review_count": 0.05, "discount": 0.05, "stock": 0.05,
+        "price_fit": 0.15, "rating": 0.10, "delivery_speed": 0.50,
+        "review_count": 0.05, "discount": 0.05, "stock": 0.05, "platform_priority": 0.10,
     },
     SortPriority.BEST_VALUE: _BASE_WEIGHTS,
 }
@@ -123,6 +124,31 @@ class ProductRanker:
         # 6. Stock bonus
         stock_score = 1.0 if product.in_stock else 0.0
 
+        # 7. Platform priority
+        platform_name = product.platform.value.lower()
+        if product.platform == Platform.SERP and product.brand:
+            platform_name = product.brand.lower()
+            
+        priority_map = {
+            "amazon": 1.0,
+            "flipkart": 0.9,
+            "blinkit": 0.8,
+            "instamart": 0.7,
+            "swiggy": 0.7,
+            "zepto": 0.6,
+            "croma": 0.5,
+            "chroma": 0.5,
+            "vijay sales": 0.4,
+            "reliance": 0.3,
+            "myntra": 0.2,
+        }
+        
+        platform_score = 0.1
+        for k, v in priority_map.items():
+            if k in platform_name:
+                platform_score = v
+                break
+
         breakdown = {
             "price_fit": price_fit,
             "rating": rating_score,
@@ -130,6 +156,7 @@ class ProductRanker:
             "review_count": review_score,
             "discount": discount_score,
             "stock": stock_score,
+            "platform_priority": platform_score,
         }
 
         total = sum(breakdown[k] * weights[k] for k in breakdown)

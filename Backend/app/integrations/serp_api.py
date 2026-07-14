@@ -134,6 +134,18 @@ class SerpAPIIntegration(BaseIntegration):
             return f"https://www.desertcart.in/search/{title_encoded}"
         if "tradeindia" in src_lower:
             return f"https://www.tradeindia.com/search.html?keyword={title_encoded}"
+        if "blinkit" in src_lower:
+            return f"https://blinkit.com/s/?q={title_encoded}"
+        if "zepto" in src_lower:
+            return f"https://www.zeptonow.com/search?q={title_encoded}"
+        if "instamart" in src_lower or "swiggy" in src_lower:
+            return f"https://www.swiggy.com/instamart/search?custom_back=true&query={title_encoded}"
+        if "myntra" in src_lower:
+            return f"https://www.myntra.com/{title_encoded}"
+        if "ajio" in src_lower:
+            return f"https://www.ajio.com/search/?text={title_encoded}"
+        if "nykaa" in src_lower:
+            return f"https://www.nykaa.com/search/result/?q={title_encoded}"
         
         # If the source is just one word or a domain like "ZOZILA.COM" or "SCOFFCO"
         domain = source.strip().lower()

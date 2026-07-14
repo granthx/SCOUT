@@ -23,7 +23,7 @@ class Settings(BaseSettings):
 
     # ── LLM ──────────────────────────────────────────────────────────────────
     gemini_api_key: str = "ADD_API_HERE"
-    llm_model: str = "gemini-2.5-flash"
+    llm_model: str = "gemini-2.0-flash"
     llm_max_tokens: int = 2048
     llm_temperature: float = 0.2
 
@@ -68,6 +68,9 @@ class Settings(BaseSettings):
     zomato_api_key: str = "ADD_API_HERE"
     zomato_api_base_url: str = "ADD_API_HERE"
 
+    quickcommerce_api_key: str = "ADD_API_HERE"
+    quickcommerce_api_base_url: str = "https://api.quickcommerceapi.com/v1"
+
     # ── Cache ─────────────────────────────────────────────────────────────────
     redis_url: str = ""                     # empty → fall back to in-memory
     cache_ttl_seconds: int = 300
@@ -79,7 +82,7 @@ class Settings(BaseSettings):
     # ── App ───────────────────────────────────────────────────────────────────
     app_env: str = "development"
     rate_limit_per_minute: int = 30
-    max_search_platforms: int = 6
+    max_search_platforms: int = 10
 
     # ── CORS ──────────────────────────────────────────────────────────────────
     allowed_origins: str = "http://localhost:3000,http://localhost:5173"
