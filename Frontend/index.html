@@ -1,64 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SCOUT — Smart Commerce & Omnichannel Unified Tracker</title>
-  <meta name="description" content="SCOUT searches Amazon, Flipkart, Blinkit, Zepto, Instamart, Myntra & Ajio simultaneously — ranks results by a 6-factor scoring engine and streams an AI recommendation in real time." />
+  <meta name="description"
+    content="SCOUT searches Amazon, Flipkart, Blinkit, Zepto, Instamart, Myntra & Ajio simultaneously — ranks results by a 6-factor scoring engine and streams an AI recommendation in real time." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" href="favicon.png" />
 </head>
+
 <body>
 
   <!-- ────────────────── TOP NAV ────────────────── -->
   <nav class="nav">
-    <div class="nav-logo">
-      <span class="nav-logo-mark"></span>
-      SCOUT
+    <div class="nav-logo" style="gap: 0; align-items: center; display: flex; font-size: 18px;">
+      <span style="letter-spacing: 2px;">SC</span>
+      <svg viewBox="0 0 24 24" width="19" height="19" style="margin: 0 2px 0 0px; transform: translateY(-1px);">
+        <defs>
+          <linearGradient id="scoutOGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#9d7cf7" />
+            <stop offset="100%" stop-color="#4d43b3" />
+          </linearGradient>
+        </defs>
+        <circle cx="12" cy="12" r="12" fill="url(#scoutOGrad)" />
+        <path d="M 7 13.5 Q 12 17.5 17 13.5" fill="none" stroke="#181818" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+      <span style="letter-spacing: 2px;">UT</span>
     </div>
     <ul class="nav-links">
       <li><a href="#demo">Demo</a></li>
       <li><a href="#pipeline">Pipeline</a></li>
     </ul>
     <a href="https://github.com/4-thkind/SCOUT" target="_blank" class="btn btn-primary nav-cta">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+      </svg>
       SOURCE
     </a>
   </nav>
 
-  <!-- ────────────────── HERO BAND (cinematic) ────────────────── -->
+  <!-- ────────────────── HERO BAND (Octopus + Glass UI) ────────────────── -->
   <section class="hero">
-    <div class="hero-eyebrow">
-      <span class="badge-pill">
-        <svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3" fill="#da291c"/></svg>
-        AI-Powered · India-First · Open Source
-      </span>
+    <!-- Octopus & Tentacles Background Layer -->
+    <div class="hero-octopus-layer">
+      <!-- Centered Octopus Mascot -->
+      <div class="octopus-wrapper">
+        <img src="octopus.png" alt="SCOUT Octopus Mascot" class="hero-octopus-img" />
+      </div>
+
+      <!-- SVG Dotted Tentacle Connector Lines -->
+      <svg class="tentacle-lines" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="tentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#c084fc" stop-opacity="0.5" />
+          </linearGradient>
+        </defs>
+
+        <!-- 1. Amazon (Top Left) -->
+        <path d="M 430 260 Q 280 180, 150 110" stroke="url(#tentGrad)" stroke-width="2.5" stroke-dasharray="6 5"
+          fill="none" />
+        <circle cx="150" cy="110" r="5" fill="#a78bfa" />
+        <foreignObject x="70" y="30" width="160" height="160" style="overflow: visible;">
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <a href="https://www.amazon.in" target="_blank" rel="noopener noreferrer"
+              class="platform-logo-node node-amazon" title="Amazon" style="position: relative;">
+              <img src="logos/circle_amazon_white.png" alt="Amazon" class="logo-img-red logo-img-red--contain" />
+            </a>
+          </div>
+        </foreignObject>
+
+        <!-- 2. Flipkart (Mid Left) -->
+        <path d="M 390 350 Q 240 340, 90 330" stroke="url(#tentGrad)" stroke-width="2.5" stroke-dasharray="6 5"
+          fill="none" />
+        <circle cx="90" cy="330" r="5" fill="#a78bfa" />
+        <foreignObject x="10" y="250" width="160" height="160" style="overflow: visible;">
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <a href="https://www.flipkart.com" target="_blank" rel="noopener noreferrer"
+              class="platform-logo-node node-flipkart" title="Flipkart" style="position: relative;">
+              <img src="logos/circle_flipkart.png" alt="Flipkart" class="logo-img-red logo-img-red--cover" />
+            </a>
+          </div>
+        </foreignObject>
+
+        <!-- 3. Myntra (Bottom Left) -->
+        <path d="M 420 440 Q 290 520, 160 580" stroke="url(#tentGrad)" stroke-width="2.5" stroke-dasharray="6 5"
+          fill="none" />
+        <circle cx="160" cy="580" r="5" fill="#a78bfa" />
+        <foreignObject x="80" y="500" width="160" height="160" style="overflow: visible;">
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <a href="https://www.myntra.com" target="_blank" rel="noopener noreferrer"
+              class="platform-logo-node node-myntra" title="Myntra" style="position: relative;">
+              <img src="logos/circle_myntra.png" alt="Myntra" class="logo-img-red logo-img-red--contain" />
+            </a>
+          </div>
+        </foreignObject>
+
+        <!-- 4. Ajio (Bottom Center) -->
+        <path d="M 500 460 Q 520 545, 500 630" stroke="url(#tentGrad)" stroke-width="2.5" stroke-dasharray="6 5"
+          fill="none" />
+        <circle cx="500" cy="630" r="5" fill="#a78bfa" />
+        <foreignObject x="420" y="550" width="160" height="160" style="overflow: visible;">
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <a href="https://www.ajio.com" target="_blank" rel="noopener noreferrer"
+              class="platform-logo-node node-ajio" title="AJIO" style="position: relative; text-decoration: none;">
+              <span class="ajio-red-text">AJIO</span>
+            </a>
+          </div>
+        </foreignObject>
+
+        <!-- 5. Zepto (Top Right) -->
+        <path d="M 570 260 Q 720 180, 850 110" stroke="url(#tentGrad)" stroke-width="2.5" stroke-dasharray="6 5"
+          fill="none" />
+        <circle cx="850" cy="110" r="5" fill="#a78bfa" />
+        <foreignObject x="770" y="30" width="160" height="160" style="overflow: visible;">
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <a href="https://www.zeptonow.com" target="_blank" rel="noopener noreferrer"
+              class="platform-logo-node node-zepto" title="Zepto" style="position: relative;">
+              <img src="logos/circle_zepto.png" alt="Zepto" class="logo-img-red logo-img-red--cover" />
+            </a>
+          </div>
+        </foreignObject>
+
+        <!-- 6. Blinkit (Mid Right) -->
+        <path d="M 610 350 Q 760 340, 910 330" stroke="url(#tentGrad)" stroke-width="2.5" stroke-dasharray="6 5"
+          fill="none" />
+        <circle cx="910" cy="330" r="5" fill="#a78bfa" />
+        <foreignObject x="830" y="250" width="160" height="160" style="overflow: visible;">
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <a href="https://blinkit.com" target="_blank" rel="noopener noreferrer"
+              class="platform-logo-node node-blinkit" title="Blinkit" style="position: relative;">
+              <img src="logos/circle_blinkit.png" alt="Blinkit" class="logo-img-red logo-img-red--cover" />
+            </a>
+          </div>
+        </foreignObject>
+
+        <!-- 7. Instamart (Bottom Right) -->
+        <path d="M 580 440 Q 710 520, 840 580" stroke="url(#tentGrad)" stroke-width="2.5" stroke-dasharray="6 5"
+          fill="none" />
+        <circle cx="840" cy="580" r="5" fill="#a78bfa" />
+        <foreignObject x="760" y="500" width="160" height="160" style="overflow: visible;">
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <a href="https://www.swiggy.com/instamart" target="_blank" rel="noopener noreferrer"
+              class="platform-logo-node node-instamart" title="Instamart" style="position: relative;">
+              <img src="logos/circle_instamart.png" alt="Instamart" class="logo-img-red logo-img-red--cover" />
+            </a>
+          </div>
+        </foreignObject>
     </div>
-    <h1 class="display-mega hero-title">
-      One query.<br>
-      <span class="accent">Every platform.</span><br>
-      Best pick.
-    </h1>
-    <p class="hero-sub">
-      SCOUT searches Amazon, Flipkart, Blinkit, Zepto, Instamart, Myntra &amp; Ajio simultaneously — ranks results by a composite scoring engine and streams an AI recommendation in real time.
-    </p>
-    <div class="hero-actions">
-      <a href="#demo" class="btn btn-primary">
-        Try Scout
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="https://github.com/4-thkind/SCOUT" target="_blank" class="btn btn-outline">VIEW SOURCE</a>
-    </div>
-    <div class="hero-platforms">
-      <span class="platform-chip">Amazon</span>
-      <span class="platform-chip">Flipkart</span>
-      <span class="platform-chip">Blinkit</span>
-      <span class="platform-chip">Zepto</span>
-      <span class="platform-chip">Instamart</span>
-      <span class="platform-chip">Myntra</span>
-      <span class="platform-chip">Ajio</span>
+
+    <!-- Ultra-Sleek Glassmorphism Card (Translucent so octopus glows through) -->
+    <div class="hero-glass-card">
+      <div class="hero-eyebrow">
+        <span class="badge-pill badge-pill--glass">
+          <svg width="6" height="6" viewBox="0 0 6 6">
+            <circle cx="3" cy="3" r="3" fill="#da291c" />
+          </svg>
+          AI-Powered · India-First · Open Source
+        </span>
+      </div>
+      <h1 class="display-mega hero-title">
+        One query.<br>
+        <span class="accent">Every platform.</span><br>
+        Best pick.
+      </h1>
+      <p class="hero-sub">
+        SCOUT searches Amazon, Flipkart, Blinkit, Zepto, Instamart, Myntra &amp; Ajio simultaneously — ranks results by
+        a composite scoring engine and streams an AI recommendation in real time.
+      </p>
+      <div class="hero-actions">
+        <a href="#demo" class="btn btn-primary">
+          Try Scout
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+        <a href="https://github.com/4-thkind/SCOUT" target="_blank" class="btn btn-outline">VIEW SOURCE</a>
+      </div>
     </div>
     <div class="scan-bar"></div>
   </section>
@@ -69,7 +193,9 @@
   <section class="demo" id="demo">
     <div class="demo-label reveal">
       <span class="badge-pill">
-        <svg width="8" height="8" viewBox="0 0 8 8"><rect width="8" height="8" rx="1" fill="#da291c"/></svg>
+        <svg width="8" height="8" viewBox="0 0 8 8">
+          <rect width="8" height="8" rx="1" fill="#da291c" />
+        </svg>
         Live Interaction
       </span>
       <h2 class="display-lg" style="margin-top:16px;">See SCOUT in action</h2>
@@ -99,28 +225,39 @@
         <!-- Thinking badges -->
         <div class="thinking-row">
           <div class="thinking-badge">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path d="M9 12l2 2 4-4" />
+            </svg>
             Parsed Intent
           </div>
           <div class="thinking-badge" style="animation-delay:0.2s;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
             Searching 6 Platforms…
           </div>
           <div class="thinking-badge" style="animation-delay:0.4s;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M7 12h10M10 18h4"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M3 6h18M7 12h10M10 18h4" />
+            </svg>
             Ranking Results
           </div>
         </div>
 
         <!-- Product cards -->
         <div class="products-grid">
-          <a href="https://www.amazon.in/s?k=Sony+PlayStation+5" target="_blank" rel="noopener noreferrer" class="product-card-link">
+          <a href="https://www.amazon.in/s?k=Sony+PlayStation+5" target="_blank" rel="noopener noreferrer"
+            class="product-card-link">
             <div class="product-card">
               <span class="product-platform">Amazon</span>
               <span class="product-name">Sony PlayStation®5 Console (slim)</span>
               <span class="product-price">₹44,990</span>
               <div class="score-bar-wrap">
-                <div class="score-bar"><div class="score-fill" style="width:96%"></div></div>
+                <div class="score-bar">
+                  <div class="score-fill" style="width:96%"></div>
+                </div>
                 <span class="score-label">96 / 100</span>
               </div>
               <div class="product-meta">
@@ -129,13 +266,16 @@
               </div>
             </div>
           </a>
-          <a href="https://www.flipkart.com/search?q=Green+Soul+Gaming+Chair" target="_blank" rel="noopener noreferrer" class="product-card-link">
+          <a href="https://www.flipkart.com/search?q=Green+Soul+Gaming+Chair" target="_blank" rel="noopener noreferrer"
+            class="product-card-link">
             <div class="product-card">
               <span class="product-platform">Flipkart</span>
               <span class="product-name">Green Soul Monster Ultimate Chair</span>
               <span class="product-price">₹14,990</span>
               <div class="score-bar-wrap">
-                <div class="score-bar"><div class="score-fill" style="width:91%"></div></div>
+                <div class="score-bar">
+                  <div class="score-fill" style="width:91%"></div>
+                </div>
                 <span class="score-label">91 / 100</span>
               </div>
               <div class="product-meta">
@@ -144,13 +284,16 @@
               </div>
             </div>
           </a>
-          <a href="https://blinkit.com/s/?q=Doritos" target="_blank" rel="noopener noreferrer" class="product-card-link">
+          <a href="https://blinkit.com/s/?q=Doritos" target="_blank" rel="noopener noreferrer"
+            class="product-card-link">
             <div class="product-card">
               <span class="product-platform">Blinkit</span>
               <span class="product-name">Doritos Nacho Cheese (130g)</span>
               <span class="product-price">₹85</span>
               <div class="score-bar-wrap">
-                <div class="score-bar"><div class="score-fill" style="width:85%"></div></div>
+                <div class="score-bar">
+                  <div class="score-fill" style="width:85%"></div>
+                </div>
                 <span class="score-label">85 / 100</span>
               </div>
               <div class="product-meta">
@@ -163,14 +306,19 @@
 
         <!-- AI narration -->
         <div class="ai-reply body-md">
-          Here is your ultimate gaming weekend sorted! Grab the <strong>Sony PS5</strong> on Amazon for the best price, and pair it with the <strong>Green Soul Monster</strong> chair from Flipkart for maximum comfort. Your <strong>Doritos</strong> can be delivered in just 12 minutes via Blinkit so you won't go hungry while setting up.<span class="ai-cursor"></span>
+          Here is your ultimate gaming weekend sorted! Grab the <strong>Sony PS5</strong> on Amazon for the best price,
+          and pair it with the <strong>Green Soul Monster</strong> chair from Flipkart for maximum comfort. Your
+          <strong>Doritos</strong> can be delivered in just 12 minutes via Blinkit so you won't go hungry while setting
+          up.<span class="ai-cursor"></span>
         </div>
       </div>
 
       <div class="chat-input-row">
         <input class="chat-input" type="text" placeholder="Ask about any product…" readonly />
         <button class="chat-send">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
         </button>
       </div>
     </div>
@@ -179,21 +327,40 @@
   <div class="divider"></div>
 
   <!-- ────────────────── PIPELINE SPEC CELLS ────────────────── -->
-  <section id="pipeline">
-    <div class="spec-grid reveal">
-      <div class="spec-cell">
+  <section id="pipeline" style="padding: var(--sp-xxl) var(--sp-lg); position: relative;">
+    <!-- Decorative background glow -->
+    <div
+      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(218, 41, 28, 0.05) 0%, transparent 70%); pointer-events: none;">
+    </div>
+
+    <div class="pipeline-header reveal"
+      style="text-align: center; margin-bottom: var(--sp-xl); position: relative; z-index: 2;">
+      <span class="badge-pill badge-pill--glass" style="margin-bottom: 16px;">
+        <svg width="8" height="8" viewBox="0 0 8 8">
+          <circle cx="4" cy="4" r="4" fill="#a78bfa" />
+        </svg>
+        Performance Metrics
+      </span>
+      <h2 class="display-md" style="margin-bottom: 16px;">Engineered for Speed & Scale</h2>
+      <p class="body-md" style="color: var(--muted); max-width: 600px; margin: 0 auto;">SCOUT's parallel search
+        architecture executes complex queries across multiple platforms in real-time, without compromising on accuracy.
+      </p>
+    </div>
+
+    <div class="spec-grid reveal" style="position: relative; z-index: 2; padding: 0;">
+      <div class="spec-cell glass-panel">
         <div class="spec-value">6</div>
         <div class="spec-label">Pipeline Stages</div>
       </div>
-      <div class="spec-cell">
+      <div class="spec-cell glass-panel">
         <div class="spec-value">7</div>
         <div class="spec-label">Platforms Searched</div>
       </div>
-      <div class="spec-cell">
+      <div class="spec-cell glass-panel">
         <div class="spec-value">&lt;1s</div>
         <div class="spec-label">First Token</div>
       </div>
-      <div class="spec-cell">
+      <div class="spec-cell glass-panel">
         <div class="spec-value">100</div>
         <div class="spec-label">Composite Score</div>
       </div>
@@ -205,9 +372,12 @@
   <!-- ────────────────── LIVERY BAND ────────────────── -->
   <section class="livery-band">
     <h2>Open source. Built to extend.</h2>
-    <p>SCOUT is MIT-licensed — add a new platform in four steps, swap the LLM, or deploy behind your own API gateway.</p>
+    <p>SCOUT — add a new platform in four steps, swap the LLM, or deploy behind your own API gateway.</p>
     <a href="https://github.com/4-thkind/SCOUT" target="_blank" class="btn btn-outline">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+      </svg>
       VIEW ON GITHUB
     </a>
   </section>
@@ -225,10 +395,11 @@
       <a href="#pipeline">Pipeline</a>
     </div>
     <div class="footer-copy">
-      © 2026 4-thkind. MIT License.
+      © 2026 4-thkind. Granthx.
     </div>
   </footer>
 
   <script src="script.js"></script>
 </body>
+
 </html>
