@@ -59,7 +59,12 @@ function initChat() {
     aiReply.appendChild(aiCursor);
 
     try {
-      const res = await fetch('http://localhost:8000/api/chat', {
+      // Determine API URL based on environment
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      // Replace this placeholder with your actual Railway URL once you have it
+      const API_BASE_URL = isLocal ? 'http://localhost:8000' : 'https://your-railway-app-url.up.railway.app';
+      
+      const res = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: message, session_id: currentSessionId })
