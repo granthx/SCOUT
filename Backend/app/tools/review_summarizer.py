@@ -15,7 +15,7 @@ from app.models.product import Product, ReviewSummary
 from app.services.llm_service import get_llm_service
 
 _MAX_REVIEW_CHARS = 3_000      # truncate per-product to stay within token budget
-_TOP_N_TO_SUMMARISE = 0        # disabled to prevent hitting the 15 RPM Gemini Free Tier limit
+_TOP_N_TO_SUMMARISE = 5        # only summarise top-N ranked products
 
 
 class ReviewSummarizer:
