@@ -1,290 +1,181 @@
 <div align="center">
 
 # SCOUT
-[https://scout-server.pages.dev/]
-### Smart Commerce & Omnichannel Unified Tracker
+**Smart Commerce & Omnichannel Unified Tracker**
 
-**One query. Every platform. Best pick.**
+[Live Deployment](https://scout-server.pages.dev/) | [Report a Bug](https://github.com/4-thkind/SCOUT/issues)
 
-SCOUT is an AI-powered shopping assistant that searches Amazon, Flipkart, Blinkit, Zepto, Instamart, Myntra & Ajio simultaneously — ranks every result through a transparent 6-factor scoring engine, and streams a natural-language recommendation back in real time.
-
-[Live Demo](#) · [API Docs](#api-reference) · [Report a Bug](https://github.com/4-thkind/SCOUT/issues)
-
-![Python](https://img.shields.io/badge/Python-100%25-3776AB?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-async%20%2B%20SSE-009688?logo=fastapi&logoColor=white)
-![Status](https://img.shields.io/badge/status-active%20development-e7c98a)
+SCOUT is an intelligent shopping assistant that searches multiple e-commerce platforms simultaneously. It ranks results using a multi-factor scoring engine and streams a structured recommendation back to the client in real-time.
 
 </div>
 
 ---
 
-## Why SCOUT
+## Overview
 
-Shopping across Indian e-commerce means opening seven tabs, comparing prices by hand, and second-guessing which platform actually has the fastest delivery. SCOUT collapses that into a single chat message:
+Modern e-commerce requires manual price comparison across multiple fragmented platforms. SCOUT automates this by collapsing the search, comparison, and evaluation process into a single interface. 
 
-> **"best wireless headphones under ₹3000"**
+Users submit natural language queries. The system processes the intent, fetches real-time data from platforms like Amazon, Flipkart, Myntra, and quick-commerce providers, ranks the products, and streams a summarized recommendation based on real data.
 
-...and in under a second, it's already searching, ranking, and narrating a verdict — not just a list of links, but an actual recommendation with reasoning.
+## Architecture and Pipeline
 
-```
-You:   best wireless headphones under ₹3000 🎧
-
-SCOUT: The Sony WH-CH520 is your best pick — 50h battery, USB-C charging,
-       and Sony's DSEE upscaling at ₹2,990 from Flipkart. If budget is
-       tighter, the boAt Rockerz 450 at ₹1,299 punches well above its
-       price with 15h playtime and solid bass.
-
-       ┌─────────────────────────────┬────────┬────────┬──────────┐
-       │ Product                     │ Price  │ Score  │ Delivery │
-       ├─────────────────────────────┼────────┼────────┼──────────┤
-       │ Sony WH-CH520 (Flipkart)    │ ₹2,990 │ 94/100 │ 3 days   │
-       │ boAt Rockerz 450 (Amazon)   │ ₹1,299 │ 88/100 │ 2 days   │
-       │ JBL Tune 520BT (Amazon)     │ ₹2,499 │ 81/100 │ 1 day    │
-       └─────────────────────────────┴────────┴────────┴──────────┘
-```
-
----
-
-## How It Works
-
-Six sequential stages, each powered by a specialized component — no hardcoded logic, the LLM drives routing, extraction, and narration end to end.
-
-```
-User Message (natural language, Hindi/Hinglish native)
-        │
-        ▼
-① Intent Router (Claude)        classifies into 6 intent types
-        │
-② Structured Extraction (Claude) NL → typed JSON: budget, brand, features, pincode
-        │
-③ Parallel Search                 fans out to every configured platform concurrently
-        │                          Amazon · Flipkart · Blinkit · Zepto · Instamart · Myntra · Ajio
-        │                          → deduplicated by title fingerprint
-        ▼
-④ 6-Factor Ranking                price fit · rating · review volume · delivery speed ·
-        │                          platform trust · feature match → 0–100 composite score
-        ▼
-⑤ Review Summarisation (Claude)   concurrent pros / cons / verdict per top product
-        ▼
-⑥ SSE Streaming                   events flow to the frontend the moment they're ready
-        │                          thinking → intent → products → text (token-by-token) → done
-        ▼
-     Frontend
+```mermaid
+graph TD
+    %% Core Pipeline Spine
+    Input[User Natural Language Query] -->|Raw Text| Router[Intent Routing Module]
+    
+    Router -->|Classification| Extractor[Structured Data Extraction]
+    
+    Extractor -->|JSON Parameters| Search[Parallel Platform Search]
+    
+    Search -->|Aggregated Results| Dedup[Title Fingerprint Deduplication]
+    
+    Dedup -->|Clean Dataset| Ranker[6-Factor Ranking Engine]
+    
+    Ranker -->|Top Products| Summarizer[Review Summarization Module]
+    
+    Summarizer -->|Pros, Cons, Verdict| Final[Response Finalization]
+    
+    %% Shared SSE Stream (representing the Audit Trail from the reference)
+    Stream[(Server-Sent Events Client Stream)]
+    
+    %% Dotted Event Logging Connections
+    Router -.->|Event| Stream
+    Extractor -.->|Event| Stream
+    Search -.->|Event| Stream
+    Dedup -.->|Event| Stream
+    Ranker -.->|Event| Stream
+    Summarizer -.->|Event| Stream
+    Final -.->|Event| Stream
 ```
 
----
+The backend executes a six-stage pipeline powered by a large language model and parallel asynchronous requests. The process begins with **Intent Routing**, where the system classifies the user's natural language input into predefined intent categories. Following classification, **Structured Extraction** parses the raw input into a strict JSON schema containing definitive parameters such as maximum budget, preferred brand, required features, and specific delivery criteria.
 
-## Key Design Decisions
+Once the parameters are extracted, the backend initiates a **Parallel Search** phase. It fans out concurrent asynchronous requests to all configured e-commerce platforms. To maintain data integrity, the aggregated results immediately undergo deduplication using title fingerprinting algorithms. The deduplicated dataset is then passed to the **Weighted Ranking** engine. This engine evaluates every product against a six-factor scoring model that considers price fit, user ratings, review volume, delivery speed, platform trust, and feature match, ultimately assigning a composite score out of 100.
 
-Built as a ground-up rearchitecture of an earlier prototype (ShoppingGPT), fixing the problems that don't show up until real users hit it:
+The top-ranked products are sent to the **Review Summarization** module, which concurrently analyzes historical reviews to generate structured pros, cons, and a definitive verdict. Finally, through **Streaming Response**, the application utilizes Server-Sent Events (SSE) to stream the operational states—parsing, searching, and scoring—along with the final text generation back to the client in real-time.
 
-| Problem in the original prototype                     | Solution in SCOUT                                                    |
-| ------------------------------------------------------- | ---------------------------------------------------------------------- |
-| Global shared memory across all users                 | Per-session objects, UUID-keyed, Redis or in-memory TTL cache        |
-| Keyword-based router — breaks on Hindi/Hinglish        | LLM (Claude) intent router — handles slang, Hinglish, typos natively |
-| Synchronous request/response only                     | FastAPI async + Server-Sent Events, streaming from first token       |
-| Hardcoded local paths, no env config                   | `pydantic-settings`, fully environment-driven                        |
-| Single local product database                          | Live multi-platform API integrations with caching                    |
-| No deduplication across platforms                      | Title-fingerprint dedup before results ever reach the ranker         |
-| No product scoring                                     | Transparent 6-factor weighted scoring engine, not a black box        |
-| No review summarisation                                | Claude-generated pros/cons/verdict per product, computed concurrently |
-| No streaming                                            | Full SSE pipeline — badges, intent echo, product cards, live tokens  |
+## Key Engineering Decisions
 
----
+SCOUT implements per-session objects keyed by UUID with Redis or in-memory TTL caching to handle **State Management**, deliberately avoiding global shared state architecture. For **Natural Language Processing**, it replaces legacy keyword-based routing with an advanced LLM-driven router capable of handling mixed languages, slang, and typographical errors natively. 
 
-## Project Structure
+To ensure optimal performance, the system relies on **Asynchronous Execution**. Built on FastAPI with strict `async/await` patterns, it handles concurrent API requests and streams responses without blocking the main event loop. Furthermore, **Data Deduplication** is executed before results reach the ranking engine, ensuring that computational resources are not wasted scoring duplicate listings across different platforms. The entire application relies on environment-driven **Configuration Management** using `pydantic-settings` to ensure seamless deployments across development and production environments.
 
-This repo contains both halves of SCOUT:
+## Repository Structure
 
-```
+```text
 SCOUT/
-├── Backend/                 FastAPI service — see below
+├── Backend/
 │   ├── app/
-│   │   ├── main.py             app factory
-│   │   ├── config.py           environment-driven settings
-│   │   ├── agent/               core.py, router.py, prompts.py
-│   │   ├── tools/                intent extraction, search, ranking, review summarisation
-│   │   ├── integrations/         one module per platform (Amazon, Flipkart, Blinkit, Zepto…)
-│   │   ├── models/               Product, SearchIntent, Session, API schemas
-│   │   └── services/             LLM wrapper, cache, per-user session isolation
+│   │   ├── main.py             (FastAPI application factory)
+│   │   ├── config.py           (Environment settings)
+│   │   ├── agent/              (Core logic, routers, prompts)
+│   │   ├── tools/              (Extraction, search, ranking algorithms)
+│   │   ├── integrations/       (Platform-specific API clients)
+│   │   ├── models/             (Pydantic schemas)
+│   │   └── services/           (LLM client, cache, session management)
 │   └── requirements.txt
 │
-├── frontend/                 Landing page + interactive demo (static, no build step)
-│   ├── index.html
-│   ├── styles.css              design tokens lifted straight from DESIGN.md
-│   └── script.js                scroll reveal + demo chat interactivity
+├── Frontend/
+│   ├── index.html              (Static markup)
+│   ├── styles.css              (Design tokens and layout)
+│   └── script.js               (DOM manipulation and SSE client)
 │
-├── DESIGN.md                 Design system: colors, type scale, spacing, component tokens
-└── README.md                 you are here
+└── DESIGN-ferrari.md           (Design system specifications)
 ```
 
----
+## Technology Stack
 
-## Tech Stack
+- **Backend**: Python, FastAPI, Server-Sent Events
+- **Intelligence**: Large Language Model for routing, extraction, and summarization
+- **Data Providers**: SerpAPI, Affiliate APIs (Amazon, Flipkart), Direct Partnerships
+- **Storage**: Redis (with local fallback)
+- **Frontend**: Vanilla HTML/CSS/JavaScript (Zero build-step)
 
-| Layer      | Stack |
-|------------|-------|
-| Backend    | Python, FastAPI, async/await, Server-Sent Events |
-| LLM        | Claude — intent routing, structured extraction, review summarisation, narration |
-| Search     | SerpAPI (Google Shopping) day 1 → Amazon PA-API, Flipkart Affiliate API, quick-commerce partnerships |
-| Caching    | Redis with local in-memory fallback |
-| Frontend   | Vanilla HTML / CSS / JS — no framework, no build step, deploys as static files |
-| Design     | Custom token system defined in [`DESIGN.md`](./DESIGN.md) — warm near-black canvas, single amber accent, pill-shaped UI |
-
----
-
-## Quick Start
+## Local Development Setup
 
 ### Backend
 
 ```bash
 cd Backend
-python -m venv venv && source venv/bin/activate
+python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install -r requirements.txt
 
 cp .env.example .env
-# add GEMINI_API_KEY and SERP_API_KEY at minimum
+# Configure required API keys in .env
 
 python run.py
-# → http://localhost:8000
-# → http://localhost:8000/docs            interactive API docs
-# → http://localhost:8000/api/health      check which platforms are configured
 ```
+
+The API will be available at `http://localhost:8000`. 
+Interactive documentation is available at `http://localhost:8000/docs`.
 
 ### Frontend
 
+The frontend consists of static files and requires no bundler.
+
 ```bash
-cd frontend
-# no build step — just serve the static files
-python -m http.server 5500
-# → http://localhost:5500
+cd Frontend
+python -m http.server 8000
 ```
 
-Point the demo chat at your local backend by updating the fetch URL in `script.js` if you're not running both on the same origin.
+Configure `script.js` to point to your local or remote backend URL.
 
----
+## API Specification
 
-## API Reference
+### POST /api/chat
 
-### `POST /api/chat` — SSE streaming
+Initiates a streaming chat session.
 
-```jsonc
-// Request
-{
-  "message": "best wireless headphones under ₹3000",
-  "session_id": "abc123",   // optional — server creates one if omitted
-  "pincode": "110001"       // optional — enables delivery ETAs
-}
-
-// SSE events
-event: thinking  → { "message": "Searching across platforms…" }
-event: intent    → { "query_text": "...", "budget_max": 3000, ... }
-event: products  → { "products": [...], "platforms_searched": [...] }
-event: text      → "Best pick is…"        // token-by-token
-event: done      → { "session_id": "abc123" }
-```
-
-### `GET /api/search` — non-streaming
-
-```
-GET /api/search?q=wireless+headphones&budget=3000&pincode=110001&sort=best_value
-```
-
-### `GET /api/health`
-
+**Request**
 ```json
 {
-  "status": "ok",
-  "llm_connected": true,
-  "platforms_configured": ["serp", "amazon", "flipkart"],
-  "cache_connected": false
+  "message": "wireless headphones under 3000",
+  "session_id": "optional-uuid",
+  "pincode": "optional-pincode"
 }
 ```
 
-### Frontend integration example (React / Next.js)
+**Response (Server-Sent Events)**
+```text
+event: thinking
+data: {"message": "Searching platforms"}
 
-```ts
-export function useChat() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [products, setProducts] = useState<ProductCard[]>([]);
+event: intent
+data: {"query_text": "...", "budget_max": 3000}
 
-  const sendMessage = async (text: string, sessionId?: string) => {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text, session_id: sessionId }),
-    });
+event: products
+data: {"products": [...], "platforms_searched": [...]}
 
-    const reader = res.body!.getReader();
-    const decoder = new TextDecoder();
-    let aiText = '';
+event: text
+data: "The best pick is..."
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      for (const line of decoder.decode(value).split('\n')) {
-        if (!line.startsWith('data:')) continue;
-        const chunk = JSON.parse(line.slice(5));
-        if (chunk.type === 'text')     aiText += chunk.data;
-        if (chunk.type === 'products') setProducts(chunk.data.products);
-        if (chunk.type === 'done')     setMessages(m => [...m, { role: 'assistant', content: aiText }]);
-      }
-    }
-  };
-
-  return { messages, products, sendMessage };
-}
+event: done
+data: {"session_id": "..."}
 ```
 
----
+## Environment Configuration
 
-## Environment Variables
+| Variable | Description | Requirement |
+|---|---|---|
+| `LLM_API_KEY` | Primary API key for the language model | Required |
+| `SERP_API_KEY` | SerpAPI key for search aggregation | Required |
+| `REDIS_URL` | Redis connection string | Optional |
+| `AMAZON_ACCESS_KEY` | Amazon PA-API 5.0 credentials | Optional |
+| `FLIPKART_AFFILIATE_ID` | Flipkart Affiliate credentials | Optional |
 
-| Variable                                             | Description                       | Required  |
-| ------------------------------------------------------ | ------------------------------------ | ----------- |
-| `GEMINI_API_KEY`                                      | Claude API key                    | ✅ Yes    |
-| `SERP_API_KEY`                                        | SerpAPI key for Google Shopping   | ✅ Day 1  |
-| `AMAZON_ACCESS_KEY` / `SECRET_KEY` / `PARTNER_TAG`     | Amazon PA-API 5.0                 | ✅ Week 1 |
-| `FLIPKART_AFFILIATE_ID` / `TOKEN`                      | Flipkart Affiliate API            | ✅ Week 1 |
-| `BLINKIT_API_KEY` / `BASE_URL`                         | Blinkit (via partnership)         | 🔜 Future |
-| `ZEPTO_API_KEY` / `BASE_URL`                           | Zepto (via partnership)           | 🔜 Future |
-| `INSTAMART_API_KEY` / `BASE_URL`                       | Swiggy Instamart                  | 🔜 Future |
-| `REDIS_URL`                                            | Redis for caching + sessions      | Optional  |
+## Adding Platform Integrations
 
----
+The system uses a modular plugin architecture for search platforms:
 
-## Adding a New Platform
-
-SCOUT's integration layer is a plugin architecture — new platforms don't touch core logic:
-
-1. Create `Backend/app/integrations/<platform>.py` extending `BaseIntegration`
-2. Implement `async def search(intent, pincode) -> List[Product]`
-3. Register it in `_ECOMMERCE_PLATFORMS` or `_QUICK_COMMERCE_PLATFORMS` in `product_search.py`
-4. Add its API keys to `app/config.py` and `.env.example`
+1. Create `Backend/app/integrations/<platform>.py` extending `BaseIntegration`.
+2. Implement the `async def search(intent, pincode)` method.
+3. Register the integration in `product_search.py`.
+4. Add corresponding authentication keys to `config.py` and `.env`.
 
 ---
-
-## Design System
-
-The frontend's visual language — warm near-black canvas, a single disciplined amber accent, pill-shaped buttons/badges, bold display type with italic emphasis — is fully specified as a reusable token system in [`DESIGN.md`](./DESIGN.md). Hand that file to any design tool or AI agent to extend the UI consistently.
-
----
-
-## Roadmap
-
-- [ ] Live Amazon PA-API + Flipkart Affiliate integration (currently SerpAPI-backed)
-- [ ] Blinkit / Zepto / Instamart quick-commerce partnerships
-- [ ] Redis-backed session store for production deployments
-- [ ] Price-drop tracking and alerts
-- [ ] Public hosted demo
-
----
-
-
 
 <div align="center">
-
-Built by [Utkarsh Singh](https://github.com/4-thkind) and [Granth Chabbra](https://github.com/granthx)
-
+Built by Utkarsh Singh and Granth Chabbra.
 </div>
