@@ -22,13 +22,13 @@ SCOUT is an AI-powered shopping assistant that searches Amazon, Flipkart, Blinki
 
 Shopping across Indian e-commerce means opening seven tabs, comparing prices by hand, and second-guessing which platform actually has the fastest delivery. SCOUT collapses that into a single chat message:
 
-![alt text](Frontend\logos\image.png)
+![SCOUT Interface](Frontend/logos/image.png)
 
 > **"best wireless headphones under ₹3000"**
 
 ...and in under a second, it's already searching, ranking, and narrating a verdict — not just a list of links, but an actual recommendation with reasoning.
 
-```
+```text
 You:   best wireless headphones under ₹3000 🎧
 
 SCOUT: The Sony WH-CH520 is your best pick — 50h battery, USB-C charging,
@@ -51,27 +51,67 @@ SCOUT: The Sony WH-CH520 is your best pick — 50h battery, USB-C charging,
 
 Six sequential stages, each powered by a specialized component — no hardcoded logic, the LLM drives routing, extraction, and narration end to end.
 
+```mermaid
+flowchart TD
+    A([User Message<br><i>natural language, Hindi/Hinglish native</i>]) --> B
+
+    B["<b>① Intent Router (Claude)</b><br>classifies into 6 intent types"] --> C
+    
+    C["<b>② Structured Extraction (Claude)</b><br>NL → typed JSON: budget, brand, features, pincode"] --> D
+    
+    D["<b>③ Parallel Search</b><br>fans out to every configured platform concurrently<br><i>Amazon · Flipkart · Blinkit · Zepto · Instamart · Myntra · Ajio</i>"]
+    
+    D --> E["<b>Deduplication</b><br>deduplicated by title fingerprint"]
+    
+    E --> F["<b>④ 6-Factor Ranking</b><br>price fit · rating · review volume · delivery speed · platform trust · feature match<br>→ 0–100 composite score"]
+    
+    F --> G["<b>⑤ Review Summarisation (Claude)</b><br>concurrent pros / cons / verdict per top product"]
+    
+    G --> H["<b>⑥ SSE Streaming</b><br>events flow to the frontend the moment they're ready<br><i>thinking → intent → products → text (token-by-token) → done</i>"]
+    
+    H --> I([Frontend])
+    
+    style A fill:#2e2e2e,stroke:#e69a0b,stroke-width:2px,color:#fff
+    style I fill:#2e2e2e,stroke:#e69a0b,stroke-width:2px,color:#fff
+    style B fill:#1a1a1a,stroke:#333,color:#fff
+    style C fill:#1a1a1a,stroke:#333,color:#fff
+    style D fill:#1a1a1a,stroke:#333,color:#fff
+    style E fill:#1a1a1a,stroke:#333,color:#fff
+    style F fill:#1a1a1a,stroke:#333,color:#fff
+    style G fill:#1a1a1a,stroke:#333,color:#fff
+    style H fill:#1a1a1a,stroke:#333,color:#fff
 ```
-User Message (natural language, Hindi/Hinglish native)
-        │
-        ▼
-① Intent Router (Claude)        classifies into 6 intent types
-        │
-② Structured Extraction (Claude) NL → typed JSON: budget, brand, features, pincode
-        │
-③ Parallel Search                 fans out to every configured platform concurrently
-        │                          Amazon · Flipkart · Blinkit · Zepto · Instamart · Myntra · Ajio
-        │                          → deduplicated by title fingerprint
-        ▼
-④ 6-Factor Ranking                price fit · rating · review volume · delivery speed ·
-        │                          platform trust · feature match → 0–100 composite score
-        ▼
-⑤ Review Summarisation (Claude)   concurrent pros / cons / verdict per top product
-        ▼
-⑥ SSE Streaming                   events flow to the frontend the moment they're ready
-        │                          thinking → intent → products → text (token-by-token) → done
-        ▼
-     Frontend
+
+---
+
+## Core Agent Pipeline
+
+```mermaid
+flowchart TD
+    Trigger["✨ Trigger: Webhook OR Scheduler"] --> Retriever["🔍 Retriever Agent"]
+    Retriever -- Fetched Code --> Analyzer["🧪 Analyzer Agent"]
+    Analyzer -- Findings & Issues --> Decision["⚖️ Decision Agent"]
+    Decision -- Prioritized Tasks --> Execution["⚡ Execution Agent"]
+    Execution -- Apply Fixes To Files --> Modified["📄 Modified Code"]
+    Modified --> Verifier["✅ Verifier Agent"]
+    Verifier -- Verified Results --> Monitor["📊 Monitor Agent"]
+    Monitor -- Health & Metrics --> Git["🚀 Git Service"]
+    Git -- Auto-Commit --> Committed["📦 Committed"]
+    Committed --> Pushed["📤 Pushed"]
+
+    Audit[("🗄️ Full Audit Log - Every Decision")]
+    
+    Trigger -. Log .-> Audit
+    Retriever -. Log .-> Audit
+    Analyzer -. Log .-> Audit
+    Decision -. Log .-> Audit
+    Execution -. Log .-> Audit
+    Modified -. Log .-> Audit
+    Verifier -. Log .-> Audit
+    Monitor -. Log .-> Audit
+    Git -. Log .-> Audit
+    
+    style Audit fill:#2e2e2e,stroke:#e69a0b,stroke-width:2px,color:#fff
 ```
 
 ---
