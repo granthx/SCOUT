@@ -131,11 +131,11 @@ class ProductRanker:
             
         priority_map = {
             "amazon": 1.0,
-            "flipkart": 0.9,
-            "blinkit": 0.8,
-            "instamart": 0.7,
-            "swiggy": 0.7,
-            "zepto": 0.6,
+            "blinkit": 0.9,
+            "instamart": 0.8,
+            "swiggy": 0.8,
+            "zepto": 0.7,
+            "flipkart": 0.6,
             "croma": 0.5,
             "chroma": 0.5,
             "vijay sales": 0.4,
