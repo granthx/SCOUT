@@ -1,6 +1,7 @@
 <div align="center">
 
 # SCOUT
+[https://scout-server.pages.dev/]
 ### Smart Commerce & Omnichannel Unified Tracker
 
 **One query. Every platform. Best pick.**
