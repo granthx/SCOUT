@@ -84,34 +84,6 @@ flowchart TD
 
 ---
 
-## Core Agent Pipeline
-
-```mermaid
-flowchart TD
-    Trigger["✨ Trigger: User Query"] --> Router["🧠 Intent Router Agent<br>(Claude)"]
-    Router -- 6 Intent Types --> Extractor["📝 Extraction Agent<br>(Claude)"]
-    Extractor -- JSON: Budget, Brand --> Search["🌐 Parallel Search Agent<br>(10+ Platforms)"]
-    Search -- Raw Products --> Dedup["🔍 Deduplication Agent"]
-    Dedup -- Unique Products --> Ranker["⚖️ 6-Factor Ranker Agent"]
-    Ranker -- Scored Results --> Summarizer["💬 Review Summarizer<br>(Claude)"]
-    Summarizer -- Pros & Cons --> Streamer["⚡ SSE Streaming Agent"]
-    Streamer -- Real-time Tokens --> Frontend["📱 Frontend / User"]
-
-    Cache[("🗄️ Redis Cache / Session Store")]
-    
-    Trigger -. Query Log .-> Cache
-    Router -. Intent State .-> Cache
-    Extractor -. Parameters .-> Cache
-    Search -. API Results .-> Cache
-    Dedup -. Filtered Set .-> Cache
-    Ranker -. Scores .-> Cache
-    Summarizer -. Generated Text .-> Cache
-    
-    style Cache fill:#2e2e2e,stroke:#e69a0b,stroke-width:2px,color:#fff
-```
-
----
-
 ## Key Design Decisions
 
 Built as a ground-up rearchitecture of an earlier prototype (ShoppingGPT), fixing the problems that don't show up until real users hit it:
