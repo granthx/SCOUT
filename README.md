@@ -22,6 +22,8 @@ SCOUT is an AI-powered shopping assistant that searches Amazon, Flipkart, Blinki
 
 Shopping across Indian e-commerce means opening seven tabs, comparing prices by hand, and second-guessing which platform actually has the fastest delivery. SCOUT collapses that into a single chat message:
 
+
+
 > **"best wireless headphones under ₹3000"**
 
 ...and in under a second, it's already searching, ranking, and narrating a verdict — not just a list of links, but an actual recommendation with reasoning.
